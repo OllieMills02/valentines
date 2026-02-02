@@ -2,11 +2,22 @@
 
 import {Card, CardContent, Typography} from "@mui/material";
 import Image from "next/image";
+import {useEffect} from "react";
 
-export default function Yes(){
-    const yippieSound = new Audio("/yippieSound.mp3");
-    yippieSound.loop = true;
-    yippieSound.play();
+export default function Yes() {
+    useEffect(() => {
+        const yippieSound = new Audio("/yippieSound.wav");
+        yippieSound.loop = true;
+        const playPromise = yippieSound.play();
+        playPromise?.catch(() => {
+            // Browsers may block autoplay; ignore the error
+        });
+
+        return () => {
+            yippieSound.pause();
+            yippieSound.currentTime = 0;
+        };
+    }, []);
 
     return (
         <Card className={"h-fit flex justify-center"}>
